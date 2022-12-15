@@ -1,0 +1,21 @@
+<% layout('/layouts/boilerplate')%>
+<div class="row">
+    <div class="col-12 col-md-6 mx-auto">
+        <h1 class="h3">Send SMS Messages to Your Clients</h1>
+        <form action="/sms" method="POST" novalidate class="validated-form">
+            <div class="mb-3">
+                <label class="form-label" for="phone">Phone Number</label>
+                <input class="form-control" type="text" name="phone" id="phone" required />
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="text">Text</label>
+                <input class="form-control" type="text" name="text" id="text" required />
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-dark" type="submit">Send Message</button>
+            </div>
+        </form>
+    </div>
+</div>

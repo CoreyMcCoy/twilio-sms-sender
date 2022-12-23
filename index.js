@@ -23,18 +23,25 @@ app.get('/', (req, res) => {
 app.post('/sms', (req, res) => {
     const { phone, text } = req.body;
 
+    const numbers = phone.split(',');
+
     const accountSid = process.env.ACCOUNT_SID;
     const authToken = process.env.AUTH_TOKEN;
     const client = twilio(accountSid, authToken);
 
-    client.messages
-        .create({
-            body: text,
-            to: phone, // Text this number
-            from: '+15642140258', // From a valid Twilio number
-        })
-        .then((message) => message.sid);
-
+    try {
+        numbers.forEach(async (number) => {
+            await client.messages
+                .create({
+                    to: number, // Text this number
+                    body: text,
+                    from: '+15642140258', // From a valid Twilio number
+                })
+                .then((message) => message.sid);
+        });
+    } catch (error) {
+        console.log(error);
+    }
     // Pass a text message to the page
     res.status(200).render('show', { text, phone });
 });

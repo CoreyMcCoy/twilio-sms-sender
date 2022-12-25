@@ -1,5 +1,5 @@
 const twilio = require('twilio');
-const { MessagingResponse } = require('twilio').twiml;
+const MessagingResponse = require('twilio').twiml.MessagingResponse;
 const accountSid = process.env.ACCOUNT_SID;
 const authToken = process.env.AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
@@ -14,7 +14,7 @@ module.exports.sendSms = async (req, res) => {
                 .create({
                     to: number,
                     body: text,
-                    messagingServiceSid: 'MG39f73e44b9d75e1090be627ca80b4a7b',
+                    messagingServiceSid: 'process.env.MESSAGING_SERVICE_SID',
                 })
                 .then((message) => message.sid);
         });
@@ -28,7 +28,8 @@ module.exports.sendSms = async (req, res) => {
 module.exports.receiveSms = (req, res) => {
     const twiml = new MessagingResponse();
 
-    twiml.message('The Robots are coming! Head for the hills!');
+    const msg = twiml.message('Gee thanks!');
 
-    res.type('text/xml').send(twiml.toString());
+    res.writeHead(200, { 'Content-Type': 'text/xml' });
+    res.end(twiml.toString());
 };

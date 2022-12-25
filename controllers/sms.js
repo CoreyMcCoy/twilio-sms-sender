@@ -1,12 +1,12 @@
 const twilio = require('twilio');
-const MessagingResponse = require('twilio').twiml.MessagingResponse;
+const { MessagingResponse } = require('twilio').twiml;
 const accountSid = process.env.ACCOUNT_SID;
 const authToken = process.env.AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
-client.messaging.v1.services.create({ friendlyName: 'Digital Mavens Messaging Service' }).then((service) => console.log(service.sid));
 
 module.exports.sendSms = async (req, res) => {
     const { phone, text } = req.body;
+    console.log(req.body);
     const numbers = phone.split(',');
     try {
         numbers.forEach(async (number) => {
@@ -14,7 +14,7 @@ module.exports.sendSms = async (req, res) => {
                 .create({
                     to: number,
                     body: text,
-                    messagingServiceSid: 'MG1fe12a7e943d23674ebee5adc9937f29',
+                    messagingServiceSid: 'MG39f73e44b9d75e1090be627ca80b4a7b',
                 })
                 .then((message) => message.sid);
         });
@@ -26,12 +26,9 @@ module.exports.sendSms = async (req, res) => {
 };
 
 module.exports.receiveSms = (req, res) => {
-    // MG695614de6076c6cfcd0e8d6357d1734e
     const twiml = new MessagingResponse();
 
-    // Add a text message.
-    const msg = twiml.message('Gee thanks!');
+    twiml.message('The Robots are coming! Head for the hills!');
 
-    res.writeHead(200, { 'Content-Type': 'text/xml' });
-    res.end(twiml.toString());
+    res.type('text/xml').send(twiml.toString());
 };
